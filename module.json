@@ -1,5 +1,5 @@
 {
-  "id": "goblins-cauldron-foundry-module",
+  "id": "goblinsCauldronFoundryModule",
   "title": "The Goblins Cauldron",
   "description": "Foundry VTT Module for The Goblins Cauldron Digital Tool-Set",
   "authors": [
@@ -8,8 +8,9 @@
     }
   ],
   "esmodules": [
-    "scripts/index.js"
+    "scripts/main.js"
   ],
+  "socket": true,
   "version": "1.0.0",
   "compatibility": {
     "minimum": "10",
