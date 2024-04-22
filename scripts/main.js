@@ -21,13 +21,17 @@ function handleSocketEvent({ eventType, payload }) {
 // Listen for 'updateActor' events from the server
 function handleUpdateCharacterSheet(payload) {
   // // Get the actor
-  let actor = game.actors.get(payload.actorId);
+  const actor = [...game.actors.keys()].map((key) => {
+    return game.actors.get(key)
+  }).find((x) => {
+    return x.name === payload.actorName
+  })
 
-  console.log('game ', game)
-  
+  console.log('actorToModify ', actor._id)
+
   // Check if the actor exists
   if (!actor) {
-    console.log(`Actor with id ${payload.actorId} does not exist.`);
+    console.log(`Actor with id ${actor._id} does not exist.`);
     return;
   }
 
@@ -42,5 +46,5 @@ function handleUpdateCharacterSheet(payload) {
     content: chatMessage
   });
 
-  console.log('name ', payload.data, ' actorId ', payload.actorId, ' actor ', actor);
+  console.log('name ', payload.actorName, ' actorId ', actor._id);
 }
