@@ -38,7 +38,7 @@ function handleUpdateCharacterSheet(payload) {
   // Update the actor's name
   actor.update(payload.data);
 
-  let chatMessage = "Actor's name has been updated.";
+  let chatMessage = "Actor has been updated.";
 
   ChatMessage.create({
     user: game.user._id,
@@ -46,5 +46,5 @@ function handleUpdateCharacterSheet(payload) {
     content: chatMessage
   });
 
-  console.log('name ', payload.actorName, ' actorId ', actor._id);
+  console.log('name ', payload.data.name, ' actorId ', actor._id);
 }
