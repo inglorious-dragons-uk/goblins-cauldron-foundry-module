@@ -21,6 +21,10 @@ function handleSocketEvent({ eventType, payload }) {
       handleSendToChat(payload);
       break
     }
+    case "ROLL_DICE": {
+      handleDiceRoll(payload);
+      break
+    }
     default:
       //throw new Error('unknown event type');
       console.log('unknown event type')
@@ -65,4 +69,15 @@ function handleSendToChat(payload) {
     speaker: ChatMessage.getSpeaker(),
     content: payload.chatMessage
   });
+}
+
+function handleDiceRoll(payload) {
+  console.log(`Rolling ${payload.count}d${payload.sides}`);
+
+  const formula = payload.count +"d" + payload.sides;
+  const roll = new Roll(formula);
+
+  roll.toMessage({
+    user: game.user._id
+  })
 }
