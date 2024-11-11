@@ -11,7 +11,7 @@
         "scripts/module.js"
     ],
     "socket": true,
-    "version": "2.3.5",
+    "version": "2.3.8",
     "compatibility": {
         "minimum": "10",
         "verified": "12"
