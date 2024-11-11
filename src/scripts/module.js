@@ -5,7 +5,7 @@ Hooks.once('init', () => {
 Hooks.once('ready', () => {
   // This code runs once when Foundry is ready
   console.log("This code runs once core initialization is ready and game data is available");
-  game.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
+  game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
 });
 
 
@@ -35,14 +35,14 @@ function handleSocketEvent({ eventType, payload }) {
 function handleUpdateCharacterSheet(payload) {
   
   // Get the actor
-  const actor = [...game.actors.keys()].map((key) => {
-    return game.actors.get(key)
+  const actor = [...game.actors?.keys()].map((key) => {
+    return game.actors?.get(key)
   }).find((x) => {
-    return x.name === payload.actorName
+    return x?.name === payload.actorName
   })
 
   if (!actor) {
-    console.log(`Actor with id ${actor._id} does not exist.`);
+    console.log(`Actor with id ${actor?._id} does not exist.`);
     return;
   }
 
@@ -53,31 +53,31 @@ function handleUpdateCharacterSheet(payload) {
 }
 
 function handleSendToChat(payload) {
-  const actor = [...game.actors.keys()].map((key) => {
-    return game.actors.get(key)
+  const actor = [...game?.actors?.keys()].map((key) => {
+    return game?.actors?.get(key)
   }).find((x) => {
-    return x.name === payload.actorName
+    return x?.name === payload.actorName
   })
 
   if (!actor) {
-    console.log(`Actor with id ${actor._id} does not exist.`);
+    console.log(`Actor with id ${actor?._id} does not exist.`);
     return;
   }
 
   ChatMessage.create({
-    user: game.user._id,
+    user: game?.user?._id,
     speaker: ChatMessage.getSpeaker(),
     content: payload.chatMessage
   });
 }
 
 function handleDiceRoll(payload) {
-  console.log(`Rolling ${payload.count}d${payload.sides}`);
+  console.log(`Rolling ${payload.count}d${payload.diceType}`);
 
-  const formula = payload.count +"d" + payload.sides;
+  const formula = payload.count + "d" + payload.diceType;
   const roll = new Roll(formula);
 
   roll.toMessage({
-    user: game.user._id
+    user: game?.user?._id
   })
 }
