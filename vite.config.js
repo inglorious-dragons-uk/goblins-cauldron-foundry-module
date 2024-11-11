@@ -15,7 +15,7 @@ function updateModuleManifestPlugin() {
             const manifestJson = JSON.parse(manifestContents)
 
             if (moduleVersion) {
-                manifestContents["version"] = moduleVersion
+                manifestJson["version"] = moduleVersion
             }
 
             if (githubProject) {

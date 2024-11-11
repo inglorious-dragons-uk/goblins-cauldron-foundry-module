@@ -1,0 +1,19 @@
+{
+    "id": "goblins-cauldron-foundry-module",
+    "title": "The Goblins Cauldron",
+    "description": "Foundry VTT Module for The Goblins Cauldron Digital Tool-Set",
+    "authors": [
+        {
+            "name": "Inglorious Dragons Ltd"
+        }
+    ],
+    "esmodules": [
+        "scripts/module.js"
+    ],
+    "socket": true,
+    "version": "2.3.5",
+    "compatibility": {
+        "minimum": "10",
+        "verified": "12"
+    }
+}
