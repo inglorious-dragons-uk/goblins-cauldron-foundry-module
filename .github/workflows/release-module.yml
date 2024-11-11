@@ -36,6 +36,7 @@ jobs:
 
       - name: Update release with files
         id: create_version_release
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true # Set this to false if you want to prevent updating existing releases
