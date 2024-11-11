@@ -49,7 +49,7 @@ function handleUpdateCharacterSheet(payload) {
   // Update the actor data
   actor.update(payload.data);
 
-  console.log('Actor ', payload.data.name, ' - with ID ', actor._id, ' successfully updated!');
+  console.log('Actor ', payload?.actorName, ' - with ID ', actor?._id, ' successfully updated!');
 }
 
 function handleSendToChat(payload) {
@@ -79,5 +79,5 @@ function handleDiceRoll(payload) {
 
   roll.toMessage({
     user: game?.user?._id
-  })
+  }, 'publicroll', true)
 }
