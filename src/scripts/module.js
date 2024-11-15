@@ -35,21 +35,17 @@ function handleSocketEvent({ eventType, payload }) {
 function handleUpdateCharacterSheet(payload) {
   
   // Get the actor
-  const actor = [...game.actors?.keys()].map((key) => {
-    return game.actors?.get(key)
-  }).find((x) => {
-    return x?.name === payload.actorName
-  })
+  const actor = game.actors.get(payload?.characterFoundryId);
 
   if (!actor) {
-    console.log(`Actor with id ${actor?._id} does not exist.`);
+    console.log(`Actor with id ${payload?.characterFoundryId} does not exist.`);
     return;
   }
 
   // Update the actor data
   actor.update(payload.data);
 
-  console.log('Actor ', payload?.actorName, ' - with ID ', actor?._id, ' successfully updated!');
+  console.log('Actor ', actor?.name, ' - with ID ', actor?._id, ' successfully updated!');
 }
 
 function handleSendToChat(payload) {
