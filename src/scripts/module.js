@@ -74,10 +74,19 @@ function handleSendToChat(payload) {
 function handleDiceRoll(payload) {
   console.log(`Rolling ${payload.count}d${payload.diceType}`);
 
-  const formula = payload.count + "d" + payload.diceType;
-  const roll = new Roll(formula);
+  const rollTerms = Die.fromData({
+    faces: payload?.diceType,
+    number: payload?.count,
+    results: [{
+      active: true,
+      discarded: value.is_dropped,
+      result: parseInt(payload?.result),
+    }]
+  })
+
+  const roll = new Roll.fromTerms(rollTerms)
 
   roll.toMessage({
     user: game?.user?._id
-  }, 'publicroll', true)
+  }, payload?.rollType, true)
 }
