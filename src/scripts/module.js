@@ -35,10 +35,10 @@ function handleSocketEvent({ eventType, payload }) {
 function handleUpdateCharacterSheet(payload) {
   
   // Get the actor
-  const actor = game.actors.get(payload?.characterFoundryId);
+  const actor = game.actors.get(payload?.foundryActorId);
 
   if (!actor) {
-    console.log(`Actor with id ${payload?.characterFoundryId} does not exist.`);
+    console.log(`Actor with id ${payload?.foundryActorId} does not exist.`);
     return;
   }
 
@@ -49,19 +49,15 @@ function handleUpdateCharacterSheet(payload) {
 }
 
 function handleSendToChat(payload) {
-  const actor = [...game?.actors?.keys()].map((key) => {
-    return game?.actors?.get(key)
-  }).find((x) => {
-    return x?.name === payload.actorName
-  })
+  const actor = game.actors.get(payload?.foundryActorId);
 
   if (!actor) {
-    console.log(`Actor with id ${actor?._id} does not exist.`);
+    console.log(`Actor with id ${payload?.foundryActorId} does not exist.`);
     return;
   }
 
   ChatMessage.create({
-    user: game?.user?._id,
+    user: payload?.foundryActorId,
     speaker: ChatMessage.getSpeaker(),
     content: payload.chatMessage
   });
@@ -74,6 +70,6 @@ function handleDiceRoll(payload) {
   const roll = new Roll(formula);
 
   roll.toMessage({
-    user: game?.user?._id
+    user: payload?.foundryActorId
   }, 'publicroll', true)
 }
