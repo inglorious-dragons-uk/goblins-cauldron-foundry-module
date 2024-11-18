@@ -79,7 +79,7 @@ function handleDiceRoll(payload) {
 }
 
 function handleCastSpell(payload) {
-  const spellId = payload.body.spellItem
+  const spellId = payload.body.spellId
   const actor = game.actors.get(payload?.actorId);
 
   if (!actor) {
