@@ -40,7 +40,7 @@ export default defineConfig({
         rollupOptions: {
             input: "src/scripts/module.js",
             output: {
-                dir: "dist/scripts/",
+                dir: "dist/src/scripts/",
                 entryFileNames: "module.js",
                 format: "es",
             },

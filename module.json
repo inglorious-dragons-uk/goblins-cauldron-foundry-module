@@ -8,7 +8,7 @@
     }
   ],
   "esmodules": [
-    "/scripts/module.js"
+    "/src/scripts/module.js"
   ],
   "socket": true,
   "version": "1.0.0",

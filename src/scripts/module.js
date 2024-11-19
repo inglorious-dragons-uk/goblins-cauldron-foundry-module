@@ -8,6 +8,12 @@ Hooks.once('ready', () => {
   game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
 });
 
+Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
+  console.log('Character Update Detected')
+  console.log('actor ', actor)
+  console.log('data ', data)
+
+})
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
