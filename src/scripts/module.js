@@ -53,7 +53,7 @@ function handleUpdateCharacterSheet(payload) {
   }
 
   // Update the actor data
-  actor.update(payload.data);
+  actor?.update(payload.data);
 
   console.log('Actor ', actor?.name, ' - with ID ', actor?._id, ' successfully updated!');
 }
@@ -69,17 +69,17 @@ function handleSendToChat(payload) {
   ChatMessage.create({
     user: payload?.actorId,
     speaker: {alias: actor?.name},
-    content: payload.chatMessage
+    content: payload?.chatMessage
   });
 }
 
 function handleDiceRoll(payload) {
-  console.log(`Rolling ${payload.count}d${payload.diceType}`);
+  console.log(`Rolling ${payload?.count}d${payload?.diceType}`);
 
-  const formula = payload.count + "d" + payload.diceType;
+  const formula = payload?.count + "d" + payload?.diceType;
   const roll = new Roll(formula);
 
-  roll.toMessage({
+  roll?.toMessage({
     user: payload?.actorId
   }, 'publicroll', true)
 }
@@ -93,7 +93,7 @@ function handleCastSpell(payload) {
     return;
   }
 
-  castSpell(actor.items.get(spellId), actor)
+  castSpell(actor?.items?.get(spellId), actor)
 }
 
 //Whisper Chat Message with HTML
@@ -110,8 +110,8 @@ function handleCastSpell(payload) {
 
 
 //Cast Spell
-function getSpellcasting(actor) {
-  return actor.spellcasting.regular[0]
+function getSpellCasting(actor) {
+  return actor?.spellcasting?.regular[0]
 }
 
 function escapeHtml (string) {
@@ -134,13 +134,13 @@ function escapeHtml (string) {
 const castSpell = async (item, actor) => {
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
   const dataItemId = `data-item-id="${item.id}"`
-  const spellcasting = getSpellcasting(actor)
+  const spellCasting = getSpellCasting(actor)
   
-  item.system.location.value = spellcasting.id
+  item.system.location.value = spellCasting.id
   item.isFromConsumable = true // to make it embed data
 
   Object.defineProperty(item, 'spellcasting', {
-    value: spellcasting,
+    value: spellCasting,
     configurable: true,
   })
 
