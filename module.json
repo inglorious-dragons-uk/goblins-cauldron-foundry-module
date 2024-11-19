@@ -8,7 +8,7 @@
     }
   ],
   "esmodules": [
-    "/src/scripts/module.js"
+    "/scripts/module.js"
   ],
   "dependencies": [
     {

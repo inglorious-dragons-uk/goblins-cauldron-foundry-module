@@ -38,9 +38,9 @@ export default defineConfig({
     build: {
         sourcemap: true,
         rollupOptions: {
-            input: "src/scripts/module.js",
+            input: "scripts/module.js",
             output: {
-                dir: "dist/src/scripts/",
+                dir: "dist/scripts/",
                 entryFileNames: "module.js",
                 format: "es",
             },
