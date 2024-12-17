@@ -1,5 +1,11 @@
 Hooks.once('init', () => {
   console.log("This code runs once on initialization");
+})
+
+
+Hooks.once('ready', () => {
+  // This code runs once when Foundry is ready
+  console.log("Connecting to The Goblin's Cauldron...");
 
   game.settings.register("goblins-cauldron-foundry-module", 'gcCampaignId', {
     name: "Goblin's Cauldron Campaign Id",
@@ -38,12 +44,6 @@ Hooks.once('init', () => {
       })
     },
   });
-})
-
-
-Hooks.once('ready', () => {
-  // This code runs once when Foundry is ready
-  console.log("Connecting to The Goblin's Cauldron...");
 
   const sessionId = game?.socket?.session?.sessionId
   const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
