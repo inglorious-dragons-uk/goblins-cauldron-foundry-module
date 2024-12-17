@@ -6,7 +6,7 @@ Hooks.once('init', () => {
     hint: "Enter your Goblin's Cauldron campaign ID",
     scope: 'world',
     config: true,
-    type:  new foundry.data.fields.StringField(),
+    type:  String,
     default: '',
     onChange: campaignId => { // value is the new value of the setting
       console.log('campaignId ', campaignId)
