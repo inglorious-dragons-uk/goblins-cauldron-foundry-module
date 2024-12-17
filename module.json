@@ -1,5 +1,6 @@
 {
   "id": "goblins-cauldron-foundry-module",
+  "name": "goblins-cauldron-foundry-module",
   "title": "The Goblins Cauldron",
   "description": "Foundry VTT Module for The Goblins Cauldron Digital Tool-Set",
   "authors": [

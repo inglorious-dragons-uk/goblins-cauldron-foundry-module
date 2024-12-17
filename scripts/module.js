@@ -1,10 +1,79 @@
 Hooks.once('init', () => {
   console.log("This code runs once on initialization");
+
+  game.settings.register("goblins-cauldron-foundry-module", 'gcCampaignId', {
+    name: "Goblin's Cauldron Campaign Id",
+    hint: "Enter your Goblin's Cauldron campaign ID",
+    scope: 'world',
+    config: true,
+    type:  new foundry.data.fields.StringField(),
+    default: '',
+    onChange: campaignId => { // value is the new value of the setting
+      console.log('campaignId ', campaignId)
+      const sessionId = game?.socket?.session?.sessionId
+      fetch(
+          `https://character-api.inglorious-dragons.co.uk/v1/connect-to-gc`,
+          {
+            method: 'POST',
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.parse(JSON.stringify(`{ 
+               "campaignId" : "${campaignId}",
+               "sessionId" : "${sessionId}"
+            }`
+            ))
+          }).then(response => {
+        if (response.ok) {
+          console.log("The Goblin's Cauldron Successfully Connected!")
+          return response.json()
+        } else if (response.status === 500) {
+          return Promise.reject('Network Error')
+        }
+      }).catch((error) => {
+        console.log("Error Connecting to The Goblin's Cauldron!", error)
+      })
+    },
+  });
 })
+
 
 Hooks.once('ready', () => {
   // This code runs once when Foundry is ready
-  console.log("This code runs once core initialization is ready and game data is available");
+  console.log("Connecting to The Goblin's Cauldron...");
+
+  const sessionId = game?.socket?.session?.sessionId
+  const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
+
+  fetch(
+      `https://character-api.inglorious-dragons.co.uk/v1/connect-to-gc`,
+      {
+        method: 'POST',
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.parse(JSON.stringify(`{ 
+               "campaignId" : "${campaignId}",
+               "sessionId" : "${sessionId}"
+            }`
+        ))
+      }).then(response => {
+    if (response.ok) {
+      console.log("The Goblin's Cauldron Successfully Connected!")
+      return response.json()
+    } else if (response.status === 500) {
+      return Promise.reject('Network Error')
+    }
+  }).catch((error) => {
+    console.log("Error Connecting to The Goblin's Cauldron!", error)
+  })
+
   game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
 });
 
@@ -12,11 +81,11 @@ Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   console.log('Character Update Detected')
   console.log('actor ', actor)
   console.log('data ', data)
-
 })
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
+
 
   switch (eventType) {
     case "UPDATE_CHARACTER": {
