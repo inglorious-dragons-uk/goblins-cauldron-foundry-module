@@ -1,10 +1,12 @@
+const apiUrl = 'https://character-api.inglorious-dragons.co.uk'
+//const apiUrl = 'http://localhost:9000'
+
 Hooks.once('init', () => {
   console.log("This code runs once on initialization");
 })
 
-
 Hooks.once('ready', () => {
-  // This code runs once when Foundry is ready
+
   console.log("Connecting to The Goblin's Cauldron...");
 
   game.settings.register("goblins-cauldron-foundry-module", 'gcCampaignId', {
@@ -14,11 +16,11 @@ Hooks.once('ready', () => {
     config: true,
     type:  String,
     default: '',
-    onChange: campaignId => { // value is the new value of the setting
+    onChange: campaignId => {
       console.log('campaignId ', campaignId)
       const sessionId = game?.socket?.session?.sessionId
       fetch(
-          `https://character-api.inglorious-dragons.co.uk/v1/connect-to-gc`,
+          `${apiUrl}/v1/connect-to-gc`,
           {
             method: 'POST',
             mode: "cors",
@@ -29,7 +31,8 @@ Hooks.once('ready', () => {
             referrerPolicy: "no-referrer",
             body: JSON.parse(JSON.stringify(`{ 
                "campaignId" : "${campaignId}",
-               "sessionId" : "${sessionId}"
+               "sessionId" : "${sessionId}",
+               "foundryUrl": "${game?.socket?.io?.uri}"
             }`
             ))
           }).then(response => {
@@ -47,9 +50,10 @@ Hooks.once('ready', () => {
 
   const sessionId = game?.socket?.session?.sessionId
   const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
+  const foundryUrl = game?.socket?.io?.uri
 
   fetch(
-      `https://character-api.inglorious-dragons.co.uk/v1/connect-to-gc`,
+      `${apiUrl}/v1/connect-to-gc`,
       {
         method: 'POST',
         mode: "cors",
@@ -60,7 +64,8 @@ Hooks.once('ready', () => {
         referrerPolicy: "no-referrer",
         body: JSON.parse(JSON.stringify(`{ 
                "campaignId" : "${campaignId}",
-               "sessionId" : "${sessionId}"
+               "sessionId" : "${sessionId}",
+               "foundryUrl": "${foundryUrl}"
             }`
         ))
       }).then(response => {
@@ -110,10 +115,8 @@ function handleSocketEvent({ eventType, payload }) {
   }
 }
 
-// Listen for 'updateActor' events from the server
 function handleUpdateCharacterSheet(payload) {
-  
-  // Get the actor
+
   const actor = game.actors.get(payload?.actorId);
 
   if (!actor) {
@@ -121,7 +124,6 @@ function handleUpdateCharacterSheet(payload) {
     return;
   }
 
-  // Update the actor data
   actor?.update(payload.data);
 
   console.log('Actor ', actor?.name, ' - with ID ', actor?._id, ' successfully updated!');
@@ -178,7 +180,6 @@ function handleCastSpell(payload) {
 //   })
 
 
-//Cast Spell
 function getSpellCasting(actor) {
   return actor?.spellcasting?.regular[0]
 }
@@ -199,7 +200,6 @@ function escapeHtml (string) {
   })
 }
 
-//Example - castSpell(actor.items.get("pWJOdDbcfXQw2Y7W"), actor)
 const castSpell = async (item, actor) => {
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
   const dataItemId = `data-item-id="${item.id}"`
