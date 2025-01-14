@@ -80,18 +80,19 @@ Hooks.once('ready', () => {
   })
 
   game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
-
-  //Testing Socket Emission
-  game?.socket.emit('module.goblins-cauldron-foundry-module', {
-      eventType: "FOUNDRY_CONNECTION",
-      payload: {sessionId: sessionId, campaignId: campaignId, foundryUrl: foundryUrl}
-    });
 });
 
 Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   console.log('Character Update Detected')
   console.log('actor ', actor)
   console.log('data ', data)
+
+  //Testing Socket Emission
+  game?.socket.emit('module.goblins-cauldron-foundry-module', {
+    eventType: "UPDATE_GC_CHARACTER",
+    payload: {actor: actor, data: data}
+  });
+
 })
 
 function handleSocketEvent({ eventType, payload }) {
