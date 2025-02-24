@@ -11,12 +11,6 @@
   "esmodules": [
     "/scripts/module.js"
   ],
-  "dependencies": [
-    {
-      "name": "dddice",
-      "manifest": "https://github.com/dddice/dddice-foundry-plugin/releases/download/v0.5.3/module.json"
-    }
-  ],
   "socket": true,
   "version": "1.0.0",
   "compatibility": {

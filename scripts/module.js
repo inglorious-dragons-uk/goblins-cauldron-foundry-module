@@ -15,37 +15,7 @@ Hooks.once('ready', () => {
     scope: 'world',
     config: true,
     type:  String,
-    default: '',
-    onChange: campaignId => {
-      console.log('campaignId ', campaignId)
-      const sessionId = game?.socket?.session?.sessionId
-      fetch(
-          `${apiUrl}/v1/connect-to-gc`,
-          {
-            method: 'POST',
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            redirect: "follow",
-            referrerPolicy: "no-referrer",
-            body: JSON.parse(JSON.stringify(`{ 
-               "campaignId" : "${campaignId}",
-               "sessionId" : "${sessionId}",
-               "foundryUrl": "${game?.socket?.io?.uri}"
-            }`
-            ))
-          }).then(response => {
-        if (response.ok) {
-          console.log("The Goblin's Cauldron Successfully Connected!")
-          return response.json()
-        } else if (response.status === 500) {
-          return Promise.reject('Network Error')
-        }
-      }).catch((error) => {
-        console.log("Error Connecting to The Goblin's Cauldron!", error)
-      })
-    },
+    default: ''
   });
 
   const sessionId = game?.socket?.session?.sessionId
@@ -82,22 +52,56 @@ Hooks.once('ready', () => {
   game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
 });
 
+// TODO - Move these helper functions to a new file and export
+function isObject(x){
+  return Object.prototype.toString.call(x) === '[object Object]';
+}
+
+function getPath(obj, prefix){
+  const keys = Object.keys(obj);
+  prefix = prefix ? prefix + '.' : '';
+  return keys.reduce(function(result, key){
+    if(isObject(obj[key])){
+      result = result.concat(getPath(obj[key], prefix + key));
+    }else{
+      result.push(prefix + key);
+    }
+    return result;
+  }, []);
+}
+
+function deepFind(obj, path) {
+  let paths = path.split('.')
+      , current = obj
+      , i;
+
+  for (i = 0; i < paths.length; ++i) {
+    if (current[paths[i]] !== undefined) {
+      current = current[paths[i]];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
 Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   console.log('Character Update Detected')
   console.log('actor ', actor)
   console.log('data ', data)
 
+  const path = getPath(data)
+
   //Testing Socket Emission
   game?.socket.emit('module.goblins-cauldron-foundry-module', {
     eventType: "UPDATE_GC_CHARACTER",
-    payload: {actor: actor, data: data}
+    payload: {actor: actor, path: path[0], value: deepFind(data, path[0])}
   });
 
 })
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
-
 
   switch (eventType) {
     case "UPDATE_CHARACTER": {
