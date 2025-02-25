@@ -1,5 +1,5 @@
-const apiUrl = 'https://character-api.inglorious-dragons.co.uk'
-//const apiUrl = 'http://localhost:9000'
+//const apiUrl = 'https://character-api.inglorious-dragons.co.uk'
+const apiUrl = 'http://localhost:9000'
 
 Hooks.once('init', () => {
   console.log("This code runs once on initialization");
@@ -20,7 +20,7 @@ Hooks.once('ready', () => {
 
   const sessionId = game?.socket?.session?.sessionId
   const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
-  const foundryUrl = game?.socket?.io?.uri
+  const foundryUrl = game.data.addresses['local'] //game?.socket?.io?.uri
 
   fetch(
       `${apiUrl}/v1/connect-to-gc`,
