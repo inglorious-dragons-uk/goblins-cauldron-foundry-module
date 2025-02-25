@@ -1,6 +1,3 @@
-//const apiUrl = 'https://character-api.inglorious-dragons.co.uk'
-const apiUrl = 'http://localhost:9000'
-
 Hooks.once('init', () => {
   console.log("This code runs once on initialization");
 })
@@ -18,12 +15,22 @@ Hooks.once('ready', () => {
     default: ''
   });
 
+  game.settings.register("goblins-cauldron-foundry-module", 'developerMode', {
+    name: "Developer Mode",
+    hint: "Use this for development only",
+    scope: 'world',
+    config: true,
+    type:  Boolean,
+    default: false
+  });
+
   const sessionId = game?.socket?.session?.sessionId
   const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
+  const isDevMode = game.settings.get("goblins-cauldron-foundry-module", 'developerMode')
   const foundryUrl = game.data.addresses['local'] //game?.socket?.io?.uri
 
   fetch(
-      `${apiUrl}/v1/connect-to-gc`,
+      `${isDevMode ? 'http://localhost:9000' : 'https://character-api.inglorious-dragons.co.uk'}/v1/connect-to-gc`,
       {
         method: 'POST',
         mode: "cors",
@@ -48,7 +55,6 @@ Hooks.once('ready', () => {
   }).catch((error) => {
     console.log("Error Connecting to The Goblin's Cauldron!", error)
   })
-
   game?.socket.on('module.goblins-cauldron-foundry-module', handleSocketEvent);
 });
 
@@ -92,7 +98,7 @@ Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
 
   const path = getPath(data)
 
-  //Testing Socket Emission
+  //Testing Socket Emission to GC
   game?.socket.emit('module.goblins-cauldron-foundry-module', {
     eventType: "UPDATE_GC_CHARACTER",
     payload: {actor: actor, path: path[0], value: deepFind(data, path[0])}
