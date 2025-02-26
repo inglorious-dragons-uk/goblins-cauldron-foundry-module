@@ -91,9 +91,7 @@ function deepFind(obj, path) {
   return current;
 }
 
-Hooks.on('updateActor', onUpdateActor)
-
-function onUpdateActor(actor, data, options, userId) {
+Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   console.log('Updating Actor ', actor, ' data ', data)
 
   const path = getPath(data)
@@ -102,7 +100,11 @@ function onUpdateActor(actor, data, options, userId) {
     eventType: "UPDATE_GC_CHARACTER",
     payload: {actor: actor, path: path[0], value: deepFind(data, path[0])}
   });
-}
+})
+
+Hooks.on('spellcasting', function onTest(actor, data, options, userId) {
+  console.log('Casting a Spell Actor ', actor, ' data ', data)
+})
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
