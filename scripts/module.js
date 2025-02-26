@@ -91,20 +91,18 @@ function deepFind(obj, path) {
   return current;
 }
 
-Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
-  console.log('Character Update Detected')
-  console.log('actor ', actor)
-  console.log('data ', data)
+Hooks.on('updateActor', onUpdateActor)
+
+function onUpdateActor(actor, data, options, userId) {
+  console.log('Updating Actor ', actor, ' data ', data)
 
   const path = getPath(data)
 
-  //Testing Socket Emission to GC
   game?.socket.emit('module.goblins-cauldron-foundry-module', {
     eventType: "UPDATE_GC_CHARACTER",
     payload: {actor: actor, path: path[0], value: deepFind(data, path[0])}
   });
-
-})
+}
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
@@ -236,8 +234,4 @@ const castSpell = async (item, actor) => {
   chatMessage._source.flags.pf2e.casting.embeddedSpell = item.toObject()
   return ChatMessage.create(chatMessage)
 }
-
-
-
-
 
