@@ -102,6 +102,7 @@ function onUpdateActor(actor, data, options, userId) {
     eventType: "UPDATE_GC_CHARACTER",
     payload: {actor: actor, path: path[0], value: deepFind(data, path[0])}
   });
+
 }
 
 function handleSocketEvent({ eventType, payload }) {
