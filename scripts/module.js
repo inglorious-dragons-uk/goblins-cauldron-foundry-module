@@ -102,9 +102,16 @@ Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   });
 })
 
-Hooks.on('spellcasting', function onTest(actor, data, options, userId) {
-  console.log('Casting a Spell Actor ', actor, ' data ', data)
-})
+// Hooks.on('createActor', function onCreateActor(actor, options, userId) {
+//   console.log('Created a new Actor ', actor, ' options ', options, ' userId ', userId)
+//
+//   if (userID != game.user.id) { return;}
+//
+//   game?.socket.emit('module.goblins-cauldron-foundry-module', {
+//     eventType: "CREATE_NEW_GC_CHARACTER",
+//     payload: {actor: actor}
+//   });
+// })
 
 function handleSocketEvent({ eventType, payload }) {
   console.log('eventType ', eventType, ' payload ', payload);
