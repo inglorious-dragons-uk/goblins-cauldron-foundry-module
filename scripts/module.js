@@ -27,7 +27,7 @@ Hooks.once('ready', () => {
   const sessionId = game?.socket?.session?.sessionId
   const campaignId = game.settings.get("goblins-cauldron-foundry-module", 'gcCampaignId')
   const isDevMode = game.settings.get("goblins-cauldron-foundry-module", 'developerMode')
-  const foundryUrl = game.data.addresses['local'] //game?.socket?.io?.uri
+  const foundryUrl = isDevMode ? game.data.addresses['local'] : game.data.addresses['remote']//game?.socket?.io?.uri
 
   fetch(
       `${isDevMode ? 'http://localhost:9000' : 'https://character-api.inglorious-dragons.co.uk'}/v1/connect-to-gc`,
