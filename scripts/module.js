@@ -102,6 +102,19 @@ Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
   });
 })
 
+Hooks.on('createChatMessage', function onCreateChatMessage(actor, data, userId) {
+  console.log('New Chat Message Created ', actor, ' options ', data, ' userId ', userId)
+  //
+  // if (userID != game.user.id) {
+  //   return
+  // }
+
+  game?.socket.emit('module.goblins-cauldron-foundry-module', {
+    eventType: "FOUNDRY_ACTOR_CAST_SPELL",
+    payload: {actor: actor}
+  });
+})
+
 // Hooks.on('createActor', function onCreateActor(actor, options, userId) {
 //   console.log('Created a new Actor ', actor, ' options ', options, ' userId ', userId)
 //
