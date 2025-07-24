@@ -204,13 +204,13 @@ async function handleCastSpell(payload){
     const spellId = payload?.spellId
     const actor = game.actors.get(payload?.actorId);
     const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
+    const spellCasting = getSpellCasting(actor)
 
     const item = actor?.items?.get(spellId)
     const dataItemId = `data-item-id="${item.id}"`
     item.system.location.value = spellCasting.id
     item.isFromConsumable = true // to make it embed data
 
-    const spellCasting = getSpellCasting(actor)
     Object.defineProperty(item, 'spellcasting', {
         value: spellCasting,
         configurable: true,
