@@ -9,7 +9,8 @@
     }
   ],
   "esmodules": [
-    "/scripts/module.js"
+    "/scripts/module.js",
+    "/scripts/spellHandler.js"
   ],
   "socket": true,
   "version": "1.0.0",
