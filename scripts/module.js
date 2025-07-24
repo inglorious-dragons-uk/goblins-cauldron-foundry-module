@@ -222,6 +222,15 @@ async function handleCastSpell(payload){
         configurable: true,
     })
 
+    // //TODO Check spellCasting entry has focus spell pool
+    // console.log('spellCasting', spellCasting)
+    //
+    // const currentPool = actor.system.resources.focus?.value ?? 0
+    // const newPool = Math.clamped(currentPool - 1, 0, actor.system.resources.focus?.max ?? 0)
+    //
+    // await actor.update({"system.resources.focus.value": newPool})
+    // console.log('Focus pool updated', newPool)
+
     const chatMessage = await item.toMessage(null, { create: false})
     chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
     chatMessage.flags.pf2e.casting.embeddedSpell = item.toObject()
