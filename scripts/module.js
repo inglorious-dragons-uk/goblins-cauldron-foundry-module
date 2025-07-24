@@ -182,13 +182,16 @@ function handleDiceRoll(payload) {
 function handleCastSpell(payload) {
   const spellId = payload?.spellId
   const actor = game.actors.get(payload?.actorId);
+  const slotId = payload?.slotId
+  const slotLevel = payload?.slotLevel
+  const isExpend = payload?.isExpend
 
   if (!actor) {
     console.log(`Actor with id ${payload?.actorId} does not exist.`);
     return;
   }
 
-  castSpell(actor?.items?.get(spellId), actor)
+  castSpell(actor?.items?.get(spellId), actor, slotId, slotLevel, isExpend)
 }
 
 //Whisper Chat Message with HTML
@@ -224,11 +227,11 @@ function escapeHtml (string) {
   })
 }
 
-const castSpell = async (item, actor) => {
+const castSpell = async (item, actor, slotId, slotLevel, isExpend) => {
   const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
   const dataItemId = `data-item-id="${item.id}"`
   const spellCasting = getSpellCasting(actor)
-  
+
   item.system.location.value = spellCasting.id
   item.isFromConsumable = true // to make it embed data
 
@@ -236,6 +239,15 @@ const castSpell = async (item, actor) => {
     value: spellCasting,
     configurable: true,
   })
+
+  // Expend a spell slot
+  if (spellCasting && spellCasting?.slots) {
+    await actor.update(
+        { [`spellcasting.system.slots.slot" + ${slotLevel} + ".prepared." + ${slotId}.expended`]: isExpend });
+  } else {
+    console.log('No spell slots available to expend.');
+    return;
+  }
 
   const chatMessage = await item.toMessage(null, { create: false})
   chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
