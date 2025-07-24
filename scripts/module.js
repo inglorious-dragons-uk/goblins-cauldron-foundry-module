@@ -201,6 +201,15 @@ function handleDiceRoll(payload) {
 
 // ---------- Cast Spell ------------
 async function handleCastSpell(payload){
+    const spellId = payload?.spellId
+    const actor = game.actors.get(payload?.actorId);
+
+    if (!actor) {
+        console.log(`Actor with id ${payload?.actorId} does not exist.`);
+        return;
+    }
+
+    const item = actor?.items?.get(spellId)
     const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
     const dataItemId = `data-item-id="${item.id}"`
     const spellCasting = getSpellCasting(actor)
