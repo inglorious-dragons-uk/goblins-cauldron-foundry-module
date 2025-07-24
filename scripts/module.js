@@ -201,13 +201,10 @@ function handleDiceRoll(payload) {
 
 // ---------- Cast Spell ------------
 async function handleCastSpell(payload){
-    const spellId = payload?.spellId
-    const actor = game.actors.get(payload?.actorId);
     const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
+    const dataItemId = `data-item-id="${item.id}"`
     const spellCasting = getSpellCasting(actor)
 
-    const item = actor?.items?.get(spellId)
-    const dataItemId = `data-item-id="${item.id}"`
     item.system.location.value = spellCasting.id
     item.isFromConsumable = true // to make it embed data
 
@@ -216,7 +213,7 @@ async function handleCastSpell(payload){
         configurable: true,
     })
 
-    const chatMessage = await item.toMessage(null, {create: false})
+    const chatMessage = await item.toMessage(null, { create: false})
     chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
     chatMessage.flags.pf2e.casting.embeddedSpell = item.toObject()
     chatMessage._source.flags.pf2e.casting.embeddedSpell = item.toObject()
