@@ -4,6 +4,7 @@
   "description": "The Goblin's Cauldron Foundry VTT Module",
   "license": "N/A",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "vite build"
   },
