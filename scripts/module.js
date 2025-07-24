@@ -192,7 +192,7 @@ function handleCastSpell(payload) {
         return;
     }
 
-    castSpell(actor?.items?.get(spellId), actor, slotId, slotLevel, isExpend)
+    castSpell(actor?.items?.get(spellId), actor)
 }
 
 function handleSpellSlot(payload) {
@@ -200,12 +200,13 @@ function handleSpellSlot(payload) {
     const slotId = payload?.slotId
     const slotLevel = payload?.slotLevel
     const isExpend = payload?.isExpend
+    const spellId = payload?.spellId
 
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
         return;
     }
-    expendSpellSlot(slotLevel, getSpellCasting(actor), slotId, isExpend);
+    updateSpellSlot(slotLevel, getSpellCasting(actor), slotId, isExpend, spellId);
 }
 
 //Whisper Chat Message with HTML
@@ -241,18 +242,45 @@ function escapeHtml(string) {
     })
 }
 
-const expendSpellSlot = async (slotLevel, spellCasting, slotId, isExpend) => {
-    // Expend a spell slot
+// const updateSpellSlot = async (slotLevel, spellCasting, slotId, isExpend) => {
+//     // Expend a spell slot
+//     const preparedPath = `system.slots.slot${slotLevel}.prepared`;
+//     const prepared = foundry.utils.getProperty(spellCasting, preparedPath) || {};
+//     prepared[slotId] = {...prepared[slotId], expended: isExpend};
+//
+//     if (spellCasting && spellCasting?.system?.slots && slotLevel > 0) {
+//         await spellCasting.update({
+//             [preparedPath]: prepared
+//         })
+//     } else {
+//         console.log('No spell slots available to expend.');
+//     }
+// }
+const updateSpellSlot = async (slotLevel, spellCasting, slotId, isExpend, spellId) => {
+    // Get the prepared slots object
     const preparedPath = `system.slots.slot${slotLevel}.prepared`;
     const prepared = foundry.utils.getProperty(spellCasting, preparedPath) || {};
-    prepared[slotId] = {...prepared[slotId], expended: isExpend};
+    const currentSlot = prepared[slotId] || {};
 
-    if (spellCasting && spellCasting?.system?.slots && slotLevel > 0) {
-        await spellCasting.update({
-            [preparedPath]: prepared
-        })
-    } else {
-        console.log('No spell slots available to expend.');
+    // Only update if something changed
+    const needsUpdate =
+        currentSlot.expended !== isExpend ||
+        (spellId !== undefined && currentSlot.id !== spellId);
+
+    if (needsUpdate) {
+        prepared[slotId] = {
+            ...currentSlot,
+            expended: isExpend,
+            ...(spellId !== undefined ? { id: spellId } : {})
+        };
+
+        if (spellCasting && spellCasting?.system?.slots && slotLevel > 0) {
+            await spellCasting.update({
+                [preparedPath]: prepared
+            });
+        } else {
+            console.log('No spell slots available to expend.');
+        }
     }
 }
 
