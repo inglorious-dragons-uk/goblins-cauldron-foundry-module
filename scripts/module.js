@@ -272,7 +272,7 @@ async function handleSpellSlot(payload){
     const prepared = foundry.utils.getProperty(spellCasting, preparedPath) || {};
     prepared[slotId] = {...prepared[slotId], id: spellId};
 
-    if (spellCasting && spellCasting?.system?.slots && slotLevel > 0) {
+    if (spellCasting && spellCasting?.system?.slots) {
         await spellCasting.update({
             [preparedPath]: prepared
         })
