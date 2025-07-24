@@ -200,7 +200,7 @@ function handleDiceRoll(payload) {
 //   })
 
 // ---------- Cast Spell ------------
-export default async function handleCastSpell(payload){
+async function handleCastSpell(payload){
     const spellId = payload?.spellId
     const actor = game.actors.get(payload?.actorId);
     const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
@@ -224,7 +224,7 @@ export default async function handleCastSpell(payload){
 }
 
 // ---------- Expend Spell ------------
-export default async function handleExpendSpellSlot(payload) {
+async function handleExpendSpellSlot(payload) {
     const actor = game.actors.get(payload?.actorId);
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
@@ -250,7 +250,7 @@ export default async function handleExpendSpellSlot(payload) {
 }
 
 // ---------- Remove Spell ------------
-export default async function handleSpellSlot(payload){
+async function handleSpellSlot(payload){
     const actor = game.actors.get(payload?.actorId);
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
