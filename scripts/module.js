@@ -133,6 +133,10 @@ function handleSocketEvent({eventType, payload}) {
             handleExpendSpellSlot(payload);
             break
         }
+        case "SPELL_SLOT": {
+            handleSpellSlot(payload);
+            break
+        }
         case "ROLL_DICE": {
             handleDiceRoll(payload);
             break
@@ -246,7 +250,7 @@ export default async function handleExpendSpellSlot(payload) {
 }
 
 // ---------- Remove Spell ------------
-export default async function removeSpellFromSpellSlot(payload){
+export default async function handleSpellSlot(payload){
     const actor = game.actors.get(payload?.actorId);
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
