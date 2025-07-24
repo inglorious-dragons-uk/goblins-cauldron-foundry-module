@@ -205,7 +205,7 @@ function handleSpellSlot(payload) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
         return;
     }
-    expendSpellSlot(slotLevel, spellCasting, slotId, isExpend);
+    expendSpellSlot(slotLevel, getSpellCasting(actor), slotId, isExpend);
 }
 
 //Whisper Chat Message with HTML
@@ -256,7 +256,7 @@ const expendSpellSlot = async (slotLevel, spellCasting, slotId, isExpend) => {
     }
 }
 
-const castSpell = async (item, actor, slotId, slotLevel, isExpend) => {
+const castSpell = async (item, actor) => {
     const dataEmbeddedItem = `data-embedded-item="${escapeHtml(JSON.stringify(item.toObject(false)))}"`
     const dataItemId = `data-item-id="${item.id}"`
     const spellCasting = getSpellCasting(actor)
