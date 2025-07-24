@@ -197,11 +197,6 @@ function handleDiceRoll(payload) {
 //       `,
 //   })
 
-
-function getSpellCasting(actor) {
-    return actor?.spellcasting?.regular[0]
-}
-
 function escapeHtml(string) {
     const replacements = {
         '&': '&amp;',

@@ -22,14 +22,17 @@ export const handleCastSpell = async (payload) => {
     return ChatMessage.create(chatMessage)
 }
 
+function getSpellCasting(actor) {
+    return actor?.spellcasting?.regular[0]
+}
 // ---------- Expend Spell ------------
 export const handleExpendSpellSlot = async (payload) => {
+    const actor = game.actors.get(payload?.actorId);
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
         return;
     }
-
-    const actor = game.actors.get(payload?.actorId);
+    const spellCasting = getSpellCasting(actor)
     const slotId = payload?.slotId
     const slotLevel = payload?.slotLevel
     const isExpend = payload?.isExpend
