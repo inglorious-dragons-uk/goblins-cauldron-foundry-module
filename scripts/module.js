@@ -243,10 +243,15 @@ const castSpell = async (item, actor, slotId, slotLevel, isExpend) => {
   console.log('slotId ', slotId, ' slotLevel ', slotLevel, ' isExpend ', isExpend)
   console.log('item ', item)
 
+  const preparedPath = `system.slots.slot${slotLevel}.prepared`;
+  const prepared = foundry.utils.getProperty(spellCasting, preparedPath) || {};
+  prepared[slotId] = { ...prepared[slotId], expended: isExpend };
+
   // Expend a spell slot
   if (spellCasting && spellCasting?.system?.slots) {
-    await spellCasting.update(
-        { [`system.slots.slot${slotLevel}.prepared.${slotId}.expended`]: isExpend});
+    await spellCasting.update({
+      [preparedPath]: prepared
+    })
   } else {
     console.log('No spell slots available to expend.');
     return;
