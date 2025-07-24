@@ -22,9 +22,6 @@ export const handleCastSpell = async (payload) => {
     return ChatMessage.create(chatMessage)
 }
 
-function getSpellCasting(actor) {
-    return actor?.spellcasting?.regular[0]
-}
 // ---------- Expend Spell ------------
 export const handleExpendSpellSlot = async (payload) => {
     const actor = game.actors.get(payload?.actorId);
@@ -78,4 +75,8 @@ const removeSpellFromSpellSlot = async (slotLevel, spellCasting, slotId, spellId
             console.log('No spell slots available to expend.');
         }
     }
+}
+
+function getSpellCasting(actor) {
+    return actor?.spellcasting?.regular[0]
 }
