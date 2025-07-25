@@ -102,6 +102,14 @@ Hooks.on('updateActor', function onUpdateActor(actor, data, options, userId) {
     });
 })
 
+Hooks.on('createChatMessage', function onCreateChatMessage(actor, data, userId) {
+  console.log('New Chat Message Created ', actor, ' options ', data, ' userId ', userId)
+})
+
+Hooks.on('updateItem', function onUpdateItem(actor, data, userId) {
+  console.log('Item Updated ', actor, ' options ', data, ' userId ', userId)
+})
+
 // Hooks.on('createActor', function onCreateActor(actor, options, userId) {
 //   console.log('Created a new Actor ', actor, ' options ', options, ' userId ', userId)
 //
