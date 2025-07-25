@@ -133,8 +133,12 @@ function handleSocketEvent({eventType, payload}) {
             handleExpendSpellSlot(payload);
             break
         }
-        case "SPELL_SLOT": {
-            handleSpellSlot(payload);
+        case "ADD_REMOVE_SPELL_FROM_SLOT": {
+            handleAddRemoveSpellSlot(payload);
+            break
+        }
+        case 'ADJUST_FOCUS_POOL': {
+            handleSpellFocusPool(payload);
             break
         }
         case "ROLL_DICE": {
@@ -222,15 +226,6 @@ async function handleCastSpell(payload){
         configurable: true,
     })
 
-    // //TODO Check spellCasting entry has focus spell pool
-    // console.log('spellCasting', spellCasting)
-    //
-    // const currentPool = actor.system.resources.focus?.value ?? 0
-    // const newPool = Math.clamped(currentPool - 1, 0, actor.system.resources.focus?.max ?? 0)
-    //
-    // await actor.update({"system.resources.focus.value": newPool})
-    // console.log('Focus pool updated', newPool)
-
     const chatMessage = await item.toMessage(null, { create: false})
     chatMessage.content = chatMessage.content.replace(dataItemId, `${dataItemId} ${dataEmbeddedItem}`)
     chatMessage.flags.pf2e.casting.embeddedSpell = item.toObject()
@@ -265,7 +260,7 @@ async function handleExpendSpellSlot(payload) {
 }
 
 // ---------- Remove Spell ------------
-async function handleSpellSlot(payload){
+async function handleAddRemoveSpellSlot(payload){
     const actor = game.actors.get(payload?.actorId);
     if (!actor) {
         console.log(`Actor with id ${payload?.actorId} does not exist.`);
@@ -276,7 +271,6 @@ async function handleSpellSlot(payload){
     const spellId = payload?.spellId
     const slotLevel = payload?.slotLevel
 
-    // Expend a spell slot
     const preparedPath = `system.slots.slot${slotLevel}.prepared`;
     const prepared = foundry.utils.getProperty(spellCasting, preparedPath) || {};
     prepared[slotId] = {...prepared[slotId], id: spellId};
@@ -288,6 +282,20 @@ async function handleSpellSlot(payload){
     } else {
         console.log('No spell slots available to expend.');
     }
+}
+
+// ---------- Adjust Spell Focus Pool ------------
+async function handleSpellFocusPool(payload){
+    const actor = game.actors.get(payload?.actorId);
+    const poolValue = payload?.poolValue ?? -1; // Default to 1 if not provided
+    if (!actor) {
+        console.log(`Actor with id ${payload?.actorId} does not exist.`);
+        return;
+    }
+    const currentPool = actor.system.resources.focus?.value ?? 0
+    const newPool = Math.max(0, Math.min(currentPool + poolValue, actor.system.resources.focus?.max ?? 0));
+
+    await actor.update({"system.resources.focus.value": newPool})
 }
 
 function getSpellCasting(actor) {
